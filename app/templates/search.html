@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_product_card.html" import product_card %}
+{% block title %}{{ q or "Browse" }} — PartsHub{% endblock %}
+{% block content %}
+
+<form class="filters" action="/search" method="get">
+  <input type="hidden" name="q" value="{{ q }}">
+  <select name="vendor" onchange="this.form.submit()">
+    <option value="">All vendors</option>
+    {% for v in vendors %}
+      <option value="{{ v.name }}" {{ 'selected' if vendor == v.name }}>{{ v.label }}</option>
+    {% endfor %}
+  </select>
+  <select name="sort" onchange="this.form.submit()">
+    <option value="relevance" {{ 'selected' if sort == 'relevance' }}>Best match</option>
+    <option value="price_asc" {{ 'selected' if sort == 'price_asc' }}>Price: low to high</option>
+    <option value="price_desc" {{ 'selected' if sort == 'price_desc' }}>Price: high to low</option>
+  </select>
+  <label class="check"><input type="checkbox" name="in_stock" value="1"
+     {{ 'checked' if in_stock }} onchange="this.form.submit()"> In stock only</label>
+  <label class="check"><input type="checkbox" name="group" value="1"
+     {{ 'checked' if group }} onchange="this.form.submit()"> Group similar (compare)</label>
+</form>
+
+<h2 class="results-head">
+  {% if q %}Results for "{{ q }}"{% else %}Browse{% endif %}
+  <span class="count">
+    {% if grouped %}{{ grouped|length }} groups{% else %}{{ results|length }} items{% endif %}
+  </span>
+</h2>
+
+{% if not results %}
+  <p class="empty">No products found. Try a different term — or run
+     <code>python -m scripts.ingest</code> to load the catalog.</p>
+{% elif grouped %}
+  {% for grp in grouped %}
+    <div class="group">
+      <div class="group-head">
+        <strong>{{ grp[0].title }}</strong>
+        {% if grp|length > 1 %}
+          <span class="badge">{{ grp|length }} vendors · cheapest {{ grp[0].price|rupees }}</span>
+        {% endif %}
+      </div>
+      <div class="grid">
+        {% for p in grp %}{{ product_card(p) }}{% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="grid">
+    {% for p in results %}{{ product_card(p) }}{% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

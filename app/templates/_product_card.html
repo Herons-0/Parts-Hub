@@ -1,0 +1,24 @@
+{% macro product_card(p) %}
+<div class="card">
+  <a class="card-img" href="{{ p.url }}" target="_blank" rel="noopener">
+    {% if p.image %}<img src="{{ p.image }}" alt="{{ p.title }}" loading="lazy">
+    {% else %}<div class="noimg">no image</div>{% endif %}
+  </a>
+  <div class="card-body">
+    <span class="vendor-tag">{{ p.vendor_label }}</span>
+    <a class="card-title" href="{{ p.url }}" target="_blank" rel="noopener">{{ p.title }}</a>
+    <div class="card-meta">
+      <span class="price">{{ p.price|rupees }}</span>
+      {% if p.compare_at_price and p.price and p.compare_at_price > p.price %}
+        <span class="mrp">{{ p.compare_at_price|rupees }}</span>
+      {% endif %}
+      {% if p.in_stock %}<span class="stock in">In stock</span>
+      {% else %}<span class="stock out">Out of stock</span>{% endif %}
+    </div>
+    <div class="card-actions">
+      <a class="btn small ghost" href="/product/{{ p.id }}/compare">Compare</a>
+      <button class="btn small" onclick="openModal({{ p.id }})">+ Project</button>
+    </div>
+  </div>
+</div>
+{% endmacro %}

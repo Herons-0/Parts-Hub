@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PartsHub{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">⚡ PartsHub</a>
+    <form class="searchbar" action="/search" method="get">
+      <input type="text" name="q" placeholder="Search parts across vendors…"
+             value="{{ q|default('') }}" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+    <nav class="nav">
+      <a href="/projects">My Projects</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <span>PartsHub — unified search & BOM across Indian electronics vendors.</span>
+    <span>Prices cached from public catalogs; verify on the vendor site before buying.</span>
+  </footer>
+
+  <!-- Lightweight modal for "add to project" -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3>Add to project</h3>
+      <div id="modal-projects"></div>
+      <div class="modal-new">
+        <input type="text" id="new-project-name" placeholder="…or new project name">
+        <button onclick="createAndAdd()">Create & add</button>
+      </div>
+      <div class="modal-actions">
+        <label>Qty <input type="number" id="modal-qty" value="1" min="1"></label>
+        <button class="ghost" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

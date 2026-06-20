@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} — BOM{% endblock %}
+{% block content %}
+<a class="back" href="/projects">← All projects</a>
+
+<div class="bom-head">
+  <h2>{{ project.name }}</h2>
+  <form action="/projects/{{ project.id }}/delete" method="post"
+        onsubmit="return confirm('Delete this project?')">
+    <button class="btn small danger">Delete project</button>
+  </form>
+</div>
+
+{% if project.item_count == 0 %}
+  <p class="empty">No parts yet. <a href="/search">Search for parts</a> and add them here.</p>
+{% else %}
+  <p class="sub">{{ project.item_count }} parts across {{ project.vendors|length }} vendor(s).
+     Grand total <strong>{{ project.grand_total|rupees }}</strong> (excl. shipping).</p>
+
+  {% for v in project.vendors %}
+  <div class="bom-vendor">
+    <div class="bom-vendor-head">
+      <strong>{{ v.label }}</strong>
+      <span>Subtotal {{ v.subtotal|rupees }}</span>
+    </div>
+    <table class="bom-table">
+      <thead><tr><th>Part</th><th>Unit</th><th>Qty</th><th>Line total</th><th></th></tr></thead>
+      <tbody>
+      {% for it in v['items'] %}
+        <tr>
+          <td class="bom-part">
+            {% if it.image %}<img src="{{ it.image }}" alt="">{% endif %}
+            <a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a>
+            {% if not it.in_stock %}<span class="stock out">Out of stock</span>{% endif %}
+          </td>
+          <td>{{ it.price|rupees }}</td>
+          <td>
+            <form class="qty-form" action="/projects/{{ project.id }}/items/{{ it.id }}/quantity" method="post">
+              <input type="number" name="quantity" value="{{ it.quantity }}" min="0"
+                     onchange="this.form.submit()">
+            </form>
+          </td>
+          <td class="price">{{ it.line_total|rupees }}</td>
+          <td>
+            <form action="/projects/{{ project.id }}/items/{{ it.id }}/remove" method="post">
+              <button class="btn tiny ghost">✕</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <div class="bom-vendor-foot">
+      <a class="btn small" href="{{ v['items'][0].url }}" target="_blank" rel="noopener">
+        Go to {{ v.label }} to order →
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="grand-total">Grand total: <strong>{{ project.grand_total|rupees }}</strong></div>
+{% endif %}
+{% endblock %}

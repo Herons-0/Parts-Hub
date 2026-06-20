@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}PartsHub — search electronics across vendors{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>One search box for every parts vendor.</h1>
+  <p>Search electronics across multiple Indian vendors, compare prices, and build a
+     per-project bill of materials — without hopping between sites.</p>
+  <form class="hero-search" action="/search" method="get">
+    <input type="text" name="q" placeholder="e.g. Arduino Uno, ESP32, NEMA 17, L298N">
+    <button type="submit">Search parts</button>
+  </form>
+  <div class="chips">
+    {% for term in ["Arduino", "ESP32", "Raspberry Pi", "Motor Driver", "Sensor", "Battery"] %}
+      <a class="chip" href="/search?q={{ term }}">{{ term }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="vendor-strip">
+  <span>Searching across:</span>
+  {% for v in vendors %}<span class="vendor-pill">{{ v.label }}</span>{% endfor %}
+</section>
+
+<section class="how">
+  <div class="how-card"><h3>1 · Search</h3><p>Type a part once and see matching products from every vendor together.</p></div>
+  <div class="how-card"><h3>2 · Compare</h3><p>See the same part's price and stock side by side and pick the best deal.</p></div>
+  <div class="how-card"><h3>3 · Build a BOM</h3><p>Add parts to a project, set quantities, and get per-vendor subtotals.</p></div>
+</section>
+{% endblock %}

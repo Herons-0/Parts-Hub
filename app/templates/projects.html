@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My Projects — PartsHub{% endblock %}
+{% block content %}
+<h2 class="results-head">My Projects</h2>
+
+<form class="new-project" action="/projects" method="post">
+  <input type="text" name="name" placeholder="New project name (e.g. Line-follower robot)" required>
+  <button type="submit">Create project</button>
+</form>
+
+{% if not projects %}
+  <p class="empty">No projects yet. Create one above, then add parts from search.</p>
+{% else %}
+  <div class="project-list">
+    {% for pr in projects %}
+      <a class="project-row" href="/projects/{{ pr.id }}">
+        <span class="pr-name">{{ pr.name }}</span>
+        <span class="pr-count">{{ pr.item_count }} item{{ '' if pr.item_count == 1 else 's' }}</span>
+      </a>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
