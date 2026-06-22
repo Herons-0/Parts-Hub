@@ -18,9 +18,16 @@ roadmap toward unified checkout.
 Robocraze, ThinkRobotics, QuartzComponents (Shopify), Sharvi Electronics and
 FlyRobo (`type: "auto"`, platform detected at ingestion time), Sunrom Electronics
 (custom platform, dedicated HTML scraper), Sun Electronics
-(`sunelectronics.co.in`, WooCommerce Store API), and Ktron (`www.ktron.in`,
-`type: "auto"`). Add more in [`app/config.py`](app/config.py) — for any
-Shopify/WooCommerce store it's a single entry.
+(`sunelectronics.co.in`, WooCommerce Store API), Ktron (`www.ktron.in`,
+`type: "auto"`), and Robu.in (headless Next.js + custom GraphQL API). Add more in
+[`app/config.py`](app/config.py) — for any Shopify/WooCommerce store it's a single
+entry.
+
+Robu.in is a special case: it's a headless storefront with no public product feed,
+so [`app/scrapers/robu.py`](app/scrapers/robu.py) queries its internal GraphQL API
+(`/api/proxy/graphql`). That API is private/undocumented and Cloudflare-protected, so
+that adapter is more fragile than the public-feed vendors — run it from a normal
+network and re-capture the query if robu changes its schema.
 
 > **Onboarding a new store:** if you're unsure of its platform, run
 > `python scripts/check_vendor.py <store_url>` from your machine. It reports whether

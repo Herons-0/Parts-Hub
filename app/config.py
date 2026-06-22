@@ -92,15 +92,16 @@ VENDORS = [
         "base_url": "https://www.ktron.in",
         "currency": "INR",
     },
-    # Example of a WooCommerce vendor (HTML/Store-API fallback). Disabled by default
-    # because it needs more tuning than the Shopify feeds.
-    # {
-    #     "name": "robu",
-    #     "label": "Robu.in",
-    #     "type": "woocommerce",
-    #     "base_url": "https://robu.in",
-    #     "currency": "INR",
-    # },
+    # Robu.in is a headless Next.js storefront backed by a custom GraphQL API
+    # (no Shopify/WooCommerce feed), so it has a dedicated adapter
+    # (app/scrapers/robu.py) that queries https://robu.in/api/proxy/graphql.
+    {
+        "name": "robu",
+        "label": "Robu.in",
+        "type": "robu",
+        "base_url": "https://robu.in",
+        "currency": "INR",
+    },
 ]
 
 # Polite scraping settings.

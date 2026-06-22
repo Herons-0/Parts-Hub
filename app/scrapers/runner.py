@@ -12,13 +12,14 @@ from datetime import datetime
 
 from ..config import VENDORS
 from ..database import db, init_db, normalize_title
-from . import shopify, woocommerce, auto, sunrom
+from . import shopify, woocommerce, auto, sunrom, robu
 
 ADAPTERS = {
     "shopify": shopify.fetch_products,
     "woocommerce": woocommerce.fetch_products,
     "auto": auto.fetch_products,
     "sunrom": sunrom.fetch_products,
+    "robu": robu.fetch_products,
 }
 
 
