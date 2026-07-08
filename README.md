@@ -69,6 +69,13 @@ uvicorn app.main:app --reload
 > Run `python -m scripts.ingest` from the **project root** (the folder with this
 > README), not from inside `scripts/`.
 
+## Deploy (free, on Render)
+
+Host it free on Render: ingest the catalog locally (your home IP reaches every
+vendor; a datacenter can't), commit the built `partshub.db`, and connect the repo —
+Render reads [`render.yaml`](render.yaml) and serves it. Full walkthrough in
+[`DEPLOY.md`](DEPLOY.md).
+
 ## How it works
 1. **Ingestion** (`scripts/ingest.py` → `app/scrapers/`) fetches each vendor's public
    product catalog and stores a normalized snapshot in `partshub.db` (SQLite).

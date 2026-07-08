@@ -1,0 +1,13 @@
+# Render Blueprint — deploys PartsHub as a free Python web service.
+# In Render: New + → Blueprint → connect the Parts-Hub repo → Apply.
+# (Or create a Web Service manually and copy the build/start commands below.)
+services:
+  - type: web
+    name: partshub
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
