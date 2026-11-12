@@ -12,7 +12,7 @@ Your home network can reach every vendor (Render's datacenter can't), so run
 ingestion locally first:
 
 ```powershell
-cd C:\Users\Asus\Pictures\electronics-aggregator
+cd Parts-Hub                   # the folder you cloned
 .venv\Scripts\activate
 python -m scripts.ingest       # full catalog  (or: python -m scripts.seed_demo for a quick demo)
 ```

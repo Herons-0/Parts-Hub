@@ -76,6 +76,10 @@ vendor; a datacenter can't), commit the built `partshub.db`, and connect the rep
 Render reads [`render.yaml`](render.yaml) and serves it. Full walkthrough in
 [`DEPLOY.md`](DEPLOY.md).
 
+The `partshub.db` committed here is a snapshot ingested between 20 June and 8 July
+2026: 31,713 products from eight of the nine configured vendors (FlyRobo returned
+no products at ingestion time). Re-run ingestion locally to refresh it.
+
 ## How it works
 1. **Ingestion** (`scripts/ingest.py` → `app/scrapers/`) fetches each vendor's public
    product catalog and stores a normalized snapshot in `partshub.db` (SQLite).
@@ -94,16 +98,25 @@ app/
   database.py        SQLite schema, connection, title normalization
   search.py          full-text search + price-comparison grouping
   projects.py        project / BOM operations
+  checkout.py        per-vendor sign-in links + pre-filled cart deep links
   scrapers/
     base.py          shared helpers + normalized product shape
     shopify.py       Shopify /products.json adapter (works for any Shopify store)
     woocommerce.py   WooCommerce Store-API + HTML-fallback adapter
+    auto.py          detects Shopify vs WooCommerce for a new store
+    sunrom.py        Sunrom Electronics HTML scraper
+    robu.py          Robu.in GraphQL adapter
     runner.py        ingest all vendors → upsert into SQLite
   templates/         Jinja2 HTML
   static/            style.css + app.js
 scripts/
   ingest.py          run live ingestion
   seed_demo.py       load a tiny demo dataset
+  check_vendor.py    report which platform/adapter a store needs
+partshub.db          bundled catalog snapshot served by the Render deploy
+render.yaml          Render blueprint
+ARCHITECTURE.md      design notes and roadmap
+DEPLOY.md            deployment walkthrough
 ```
 
 ## Notes & limitations
